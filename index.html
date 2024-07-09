@@ -2,10 +2,12 @@
 <html lang="en-us">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://telegram.org; connect-src 'self' https://satoshidash-167f3.web.app; style-src 'self' 'unsafe-inline'; frame-src 'self' https://oauth.telegram.org;">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Runner2060</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <!-- Обновленный CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://telegram.org; script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' blob: https://telegram.org; connect-src 'self' https://satoshidash-167f3.web.app; style-src 'self' 'unsafe-inline'; frame-src 'self' https://oauth.telegram.org;">
 </head>
 <body>
     <div id="unity-container" class="unity-desktop">
@@ -26,21 +28,17 @@
 
     <!-- Виджет Telegram -->
     <div style="text-align: center; margin-top: 20px;">
-        <script async src="https://telegram.org/js/telegram-widget.js?22"
+        <script async src="https://telegram.org/js/telegram-widget.js?7"
                 data-telegram-login="TestAuth34766543_bot"
                 data-size="large"
-                data-onauth="onTelegramAuth(user)"
-                data-request-access="write"></script>
+                data-auth-url="https://your-public-server.com/auth"
+                data-request-access="write"
+                onload="console.log('Telegram widget loaded successfully.');"
+                onerror="console.error('Failed to load Telegram widget.');"></script>
         <p id="telegram-widget-status">Если вы видите этот текст, значит виджет Telegram не загрузился.</p>
     </div>
 
     <script>
-        function onTelegramAuth(user) {
-            alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
-            // Отправка данных в Unity
-            window.sendTelegramDataToUnity(user.id, user.username || user.first_name + ' ' + user.last_name);
-        }
-
         var container = document.querySelector("#unity-container");
         var canvas = document.querySelector("#unity-canvas");
         var loadingBar = document.querySelector("#unity-loading-bar");
@@ -120,7 +118,7 @@
             setTimeout(function() {
                 var statusElement = document.getElementById('telegram-widget-status');
                 if (statusElement) {
-                    if (document.querySelector('script[src="https://telegram.org/js/telegram-widget.js?22"]')) {
+                    if (document.querySelector('script[src="https://telegram.org/js/telegram-widget.js?7"]')) {
                         statusElement.innerText = 'Виджет Telegram должен был загрузиться.';
                     } else {
                         statusElement.innerText = 'Виджет Telegram не загрузился.';

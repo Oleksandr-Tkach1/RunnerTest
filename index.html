@@ -25,7 +25,20 @@
     </div>
 
     <script>
-        function initTelegramWidget() {
+        function initUnity() {
+            var buildUrl = "Build";
+            var loaderUrl = buildUrl + "/web.loader.js";
+            var config = {
+                dataUrl: buildUrl + "/web.data",
+                frameworkUrl: buildUrl + "/web.framework.js",
+                codeUrl: buildUrl + "/web.wasm",
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: "CryptomeriaLabs",
+                productName: "Runner2060",
+                productVersion: "1.0.12",
+                showBanner: unityShowBanner,
+            };
+
             var container = document.querySelector("#unity-container");
             var canvas = document.querySelector("#unity-canvas");
             var loadingBar = document.querySelector("#unity-loading-bar");
@@ -51,19 +64,6 @@
                 updateBannerVisibility();
             }
 
-            var buildUrl = "Build";
-            var loaderUrl = buildUrl + "/web.loader.js";
-            var config = {
-            dataUrl: buildUrl + "/web.data",
-            frameworkUrl: buildUrl + "/web.framework.js",
-            codeUrl: buildUrl + "/web.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "CryptomeriaLabs",
-            productName: "Runner2060",
-            productVersion: "1.0.12",
-            showBanner: unityShowBanner,
-            };
-
             if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                 var meta = document.createElement('meta');
                 meta.name = 'viewport';
@@ -88,22 +88,6 @@
                     fullscreenButton.onclick = () => {
                         unityInstance.SetFullscreen(1);
                     };
-
-                    // Function to send Telegram data to Unity
-                    window.sendTelegramDataToUnity = function(userId, username) {
-                        unityInstance.SendMessage('GameManager', 'OnTelegramAuth', JSON.stringify({ userId, username }));
-                    };
-
-                    // Инициализация Telegram виджета
-                    var telegramWidgetScript = document.createElement('script');
-                    telegramWidgetScript.async = true;
-                    telegramWidgetScript.src = "https://telegram.org/js/telegram-widget.js?22";
-                    telegramWidgetScript.setAttribute('data-telegram-login', "TestAuth34766543_bot");
-                    telegramWidgetScript.setAttribute('data-size', "large");
-                    telegramWidgetScript.setAttribute('data-onauth', "onTelegramAuth(user)");
-                    telegramWidgetScript.setAttribute('data-request-access', "write");
-                    document.body.appendChild(telegramWidgetScript);
-
                 }).catch((message) => {
                     alert(message);
                 });
@@ -111,8 +95,20 @@
             document.body.appendChild(script);
         }
 
-        // Вызов функции инициализации после полной загрузки DOM
+        function initTelegramWidget() {
+            var telegramWidgetScript = document.createElement('script');
+            telegramWidgetScript.async = true;
+            telegramWidgetScript.src = "https://telegram.org/js/telegram-widget.js?22";
+            telegramWidgetScript.setAttribute('data-telegram-login', "TestAuth34766543_bot");
+            telegramWidgetScript.setAttribute('data-size', "large");
+            telegramWidgetScript.setAttribute('data-onauth', "onTelegramAuth(user)");
+            telegramWidgetScript.setAttribute('data-request-access', "write");
+            document.body.appendChild(telegramWidgetScript);
+        }
+
+        // Вызов функции инициализации Unity и Telegram после полной загрузки DOM
         document.addEventListener('DOMContentLoaded', function() {
+            initUnity();
             initTelegramWidget();
         });
 
